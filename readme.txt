@@ -6,3 +6,7 @@ this is a git repository test;
 
 使用命令git add <file>，注意，可反复多次使用，添加多个文件；
 使用命令git commit -m <message>，完成
+
+2.--------------------
+git is a distributed version contrl system.
+git is free software distributed under the GPL.
