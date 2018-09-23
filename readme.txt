@@ -10,3 +10,7 @@ this is a git repository test;
 2.--------------------
 git is a distributed version contrl system.
 git is free software distributed under the GPL.
+3------------------------
+Git is a distributed version control system.
+Git is free software distributed under the GPL.
+Git has a mutable index called stage.

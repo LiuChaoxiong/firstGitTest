@@ -1,0 +1,191 @@
+HTTP 基础
+1.url:统一资源定位符
+
+	http://www.baidu.com/path?name=lcx&age=28
+
+协议:http
+主机名:
+端口:
+路径:
+查询字符串:
+
+
+2.网路通信的过程:
+
+	客户端 ---> 请求request ---> 路由route ---> 响应response\
+			   head+ body						head + body
+
+	实例:浏览器抓包工具;
+
+	http提交方式:get(向服务器请求数据),post(表单提交,向服务器提交数据)
+
+	响应状态码:
+	200	成功
+	301,302 重定向,后面跟一个location 头,指明跳转位置
+	304 从浏览器缓存加载
+	403 权限不够,拒绝访问
+	404 资源未找到
+	500 服务器内部错误,通常是后端程序发生的错误;
+
+
+数据库基础
+1.redis(了解即可)
+	1.1介绍
+		基本功能:
+			数据库操作优化;
+			引入缓存机制;数据迁移到内存,键值对存储数据;
+		基本工具:
+			服务启动工具;
+			命令行工具
+			gui工具(窗口管理工具)			
+
+	1.2使用
+		略
+	1.3实例
+		略
+2.MongoDB
+	2.1基本使用
+		特点:
+			使用BSON储存数据;
+			支持查询
+			支持索引
+			副本集
+			分片
+			无模式
+			部署简单方便
+
+		命令行启动服务:
+			which mongod(查询是否安装了mongoDB)
+			mongod --dbpath=/data/db --port=27017(指定数据目录,启动服务) --fork --syslog(存储日志,到系统日志) --fork --log=log/path
+			show dbs(查看 数据库 )
+			use databasse001(选定数据库)
+			db.users.insert({'username':'sid'}); (创建并在users  集合  中插入值)
+			db.users.find();(查看users集合中的  文档)
+			db.users.find().count();(查看文档的个数)
+			db.users.update({'key':'value'},{$set:{'key':'value'}}[,{multi:true}]);(更新[,可选参数,是否选中全部匹配数据更新]);
+			db.users.remove({}[,true]);(删除文档)
+			mongod --shutdown(退出服务)
+
+
+		集合
+		文档
+	2.2Mongoose模块
+		2.2基本使用:略
+			见文件 D:/node/...
+			mongodb.js
+			mongoInsert.js
+			mongoFind.js
+			mongoCondition.js
+		2.2.0 mongoose 进阶:
+		2.2.1模式的扩展 (model)
+			默认值 default
+			固定值 
+			修饰符:set getter
+			虚拟属性:schema.vritual();
+			索引:
+				唯一索引
+				辅助索引
+
+		2.2.2模型方法
+			自定义静态方法
+			自定义实例方法
+
+		2.2.3数据的校验
+			预定义的验证器:required,Number(max,min),string(enum,match);
+
+		2.2.4中间件
+			(执行特定操作)
+			文档中间件(init,validate,save,remove)
+			查询中间件(count,find,findOne,findOneAndRemove,findOneAndUpdate,update)
+			预处理中间件
+			后处理中间件
+		2.2.5 DBRef(集合之间的数据引用)
+			populate();
+
+	2.3 express中使用
+			 
+
+服务器基础
+	1使用http模块创建web服务器
+		web服务器的功能:
+			接受HTTP请求
+			处理HTTP请求
+			响应返回结果给用户
+		常用的web服务器
+			Nginx/apache:接收HTTP请求,分发下去
+			php-fpm/php模块: 接受HTTP请求,处理请求,并返回处理的结果
+		Node.js服务器
+			不依赖特定web服务器软件
+			配置服务器,处理请求逻辑
+	2使用Express创建web服务器
+		静态资源
+		路由:路由router=require('express').Router();路由参数??
+		中间件
+	3 创建TCP服务器
+		不主动断开,就会一直保持联系;比如游戏服务器;
+		3.1使用net模块创建TCP服务器
+			var net = require('net');
+
+			var clientHander = function(socket){
+
+				console.log('someone connected');
+				//客户端连接后,需要监听传入的socket对象;
+				//客户端发送数据,会触发data事件,调用callback
+				socket.on('data',function dataHandler(data){
+					console.log(socket.remoteAdderss,socket.remotePort,'send',data.toString());
+				//服务器收到客户端信息后返回的语句
+				socket.write('server received\n')
+				})
+				//监听断开事件,
+				socket.on('close',function(){
+					console.log(socket.remoteAdderss,socket.remotePort,'disconnected')
+				})
+			}
+			//客户端连接后会触发clientHandler事件
+			var app = net.createServer(clientHander);
+
+			//让服务器监听一个端口;
+			app.listen(180001,'localhost');
+			console.log('TCP server is started at 180001');
+
+		3.2使用telnet连接TCP服务器
+			用net创建TCP客户端
+	4 koa入门(基于EcmaScript6)
+	 	4.1 koa简介:通过组合generator,让异步回调变得简单;
+	 		context (上下文)
+
+
+Node.js异步优化简介
+	1简介
+	1.1基本概念
+		1.同步:阻塞式调用,等待执行
+		2.回调:一个异步等效的过程(不直接返回执行结果,在函数的参数传递回调函数,在回调函数中处理返回执行结果.)
+		3.异步:非阻塞,通知获取执行结果(在系统内核中执行异步函数,在主干中返回异步执行结果)
+
+	1.2异步优化的目的
+		异步代码的问题:难以阅读;编码困难;调试复杂
+
+
+	2异步优化库
+		callback方法:异步函数封装
+		调用类库:step,Async,Then.js,Q,CO;
+		CO库的介绍:
+			1.ES6的特性(harmony关键词):
+			(todo:es6)
+			箭头操作符,类的支持,增强的对象字面量,字符串模板,解构,默认参数,不定参数,拓展参数,let,const,for of,promise.....
+		(todo:co库的优化实践??)
+	3异步优化性能对比
+		3.1测试工具
+			siege---Linux,多线程HTTP负载测试,基准测试工具
+			Pylot---window,容量计划,确定基准点,分析以及系统调优,可直接生成图像数据.
+			apache-ab---window&Linux,
+
+		3.2 Pylot性能测试方法
+			安装Python
+			安装pylot
+		性能测试分析
+
+
+				......todo:finish the video list;
+
+
